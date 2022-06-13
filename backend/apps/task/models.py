@@ -30,7 +30,7 @@ class Task(models.Model):
     class Meta:
         verbose_name = 'Задача'
         verbose_name_plural = 'Задачи'
-        ordering = ['-created']
+        ordering = ['created']
 
     def __str__(self):
         return self.name
@@ -54,7 +54,7 @@ class Tag(models.Model):
 class Comment(models.Model):
     """Модель комментария/заметки к задаче"""
     text = models.TextField('Комментарий')
-    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='tasks')
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='comments')
     created = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
 
@@ -64,4 +64,4 @@ class Comment(models.Model):
         verbose_name_plural = 'Комментарии'
 
     def __str__(self):
-        return f'{self.name[:20]}'
+        return f'{self.text[:20]}'

@@ -1,30 +1,23 @@
 from django.shortcuts import render
 
 # Create your views here.
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView, DetailView
+
+from backend.apps.task.models import *
 
 
-class IndexPage(TemplateView):
+class IndexPage(ListView):
     template_name = "index.html"
+    model = Task
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tasks'] = Task.objects.all()
+        return context
 
 
-
-class ProductListView(FilterView):
-    model = Product
-    template_name = "product_list.html"
-    paginate_by = 6
-    #стандартное имя списка продуктов в шаблоне
-    # для ListView - object_list
-    filterset_class = ProductFilter
-
-    def get_queryset(self):
-        print(self.kwargs) # поле self.kwargs посмтореть что это
-        category_slug = self.kwargs.get('slug')
-        subcategory_slug = self.kwargs.get('subcategory_slug')
-        if subcategory_slug:
-            products = Product.objects.filter(is_active=True, subcategory__slug=subcategory_slug)
-        elif category_slug:
-            products = Product.objects.filter(is_active=True, category__slug=category_slug)
-        else:
-            products = Product.objects.filter(is_active=True)
-        return products
+class TaskDetailView(DetailView):
+    model = Task
+    template_name = "task_detail.html"
+    context_object_name = "task" # стандартный object
+    extra_context = {'comments': Comment.objects.all()}
