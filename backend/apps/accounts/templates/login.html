@@ -1,0 +1,41 @@
+{% extends "base_dashboard.html" %}
+{% load static %}
+{% block content %}
+<div class="card-body">
+  <h5 class="login-box-msg">Войти</h5>
+    <form method="post">
+      {% csrf_token %}
+        <div class="input-group mb-3">
+          <label class="form-label"></label>
+              {{ form.username }}
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-envelope"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <label class="form-label"></label>
+          {{ form.password }}
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <button type="submit" class="btn btn-primary btn-block">Войти</button>
+          </div>
+          <!-- /.col -->
+        </div>
+      </form>
+      <p></p>
+      <p class="mb-1 text-center">
+        <a href="forgot-password.html" class="text-center">Забыл пароль</a>
+      </p>
+      <p class="mb-0 text-center" >
+        <a href="{% url 'register' %}" class="text-center">Зарегистрироваться</a>
+      </p>
+</div>
+{% endblock %}
