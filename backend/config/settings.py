@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # my apps
     'backend.apps.task',
     'backend.apps.accounts',
+    'backend.apps.job',
 ]
 
 MIDDLEWARE = [

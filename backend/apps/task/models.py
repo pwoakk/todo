@@ -1,5 +1,7 @@
-from django.contrib.auth.models import User
 from django.db import models
+
+from backend.apps.accounts.models import User
+from backend.apps.job.models import Department
 
 
 class Task(models.Model):
@@ -25,7 +27,8 @@ class Task(models.Model):
     status = models.CharField("Статус", max_length=11,
                               choices=TASK_STATUSES, default=STATUS_NOT_STARTED)
 
-    author = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
+    department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Задача'
@@ -57,7 +60,6 @@ class Comment(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='comments')
     created = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
-
 
     class Meta:
         verbose_name = 'Комментарий'

@@ -1,7 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
+from django.core import validators
 
-from .models import User
+from .models import User, WorkerProfile
 
 
 class LoginForm(forms.Form):
@@ -29,8 +30,13 @@ class UserRegisterForm(UserCreationForm):
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',
             'type': 'password',
-            'placeholder': 'Введите пароль'
+            'placeholder': 'Введите повторно пароль'
         })
+    )
+    phone = forms.CharField(
+        validators=[validators.MaxLengthValidator(10), validators.MinLengthValidator(10)],
+        label='Телефон',
+        widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Телефон'})
     )
 
     class Meta:
@@ -47,7 +53,6 @@ class UserRegisterForm(UserCreationForm):
             'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Имя'}),
             'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Фамилия'}),
             'middle_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Отчество'}),
-            'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Номер телефона'}),
         }
 
 
@@ -69,3 +74,9 @@ class UserUpdateForm(forms.ModelForm):
             'phone': forms.TextInput(attrs={'class': 'form-control'}),
             'avatar': forms.FileInput(attrs={'class': 'form-control'}),
         }
+
+#
+# class WorkerForm(forms.ModelForm):
+#
+#     class Meta:
+#         model = WorkerProfile

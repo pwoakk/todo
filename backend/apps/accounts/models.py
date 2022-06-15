@@ -3,44 +3,65 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
 
-
-class UserManager(BaseUserManager):
-    def create_user(self, username=None, password=None, **extra_fields):
-        if not username:
-            raise ValueError('The given email must be set')
-        email = self.normalize_email(username)
-        user = self.model(username=username, **extra_fields)
-        user.set_password(password)
-        user.save()
-        return user
-
-    def create_superuser(self, username, password, **extra_fields):
-        """
-        Create and save a SuperUser with the given email and password.
-        """
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-        extra_fields.setdefault('is_active', True)
-
-        if extra_fields.get('is_staff') is not True:
-            raise ValueError('Superuser must have is_staff=True.')
-        if extra_fields.get('is_superuser') is not True:
-            raise ValueError(_('Superuser must have is_superuser=True.'))
-        return self.create_user(username, password, **extra_fields)
+from backend.apps.accounts.managers import UserManager
+from backend.apps.job.models import Department, Government
 
 
 class User(AbstractUser):
+    ROLE_DIRECTOR = 'Директор'
+    ROLE_MANAGER = 'Менеджер'
+    ROLE_STAFF = 'Специалист'
+    ROLES = (
+        (ROLE_DIRECTOR, 'Директор'),
+        (ROLE_MANAGER, 'Менеджер'),
+        (ROLE_STAFF, 'Специалист'),
+    )
+
     username = models.CharField('Логин', max_length=150, unique=True)
+    role = models.CharField('Роль', choices=ROLES, default=ROLE_STAFF, max_length=50)
     middle_name = models.CharField('Отчество', max_length=150, blank=True)
     email = None
     avatar = models.ImageField("Фото", upload_to="user_images/", null=True, blank=True)
+    is_active = models.BooleanField('Работает', default=False)
     phone = models.CharField(
         'Номер телефона',
         null=True,
-        max_length=10
+        blank=True,
+        max_length=10,
     )
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
 
     objects = UserManager()
+
+
+class DirectorProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='director', verbose_name='Сотрудник')
+    government = models.ForeignKey(Government, on_delete=models.PROTECT, related_name='directors', verbose_name='Отдел')
+
+    class Meta:
+        verbose_name = 'Руководство'
+        verbose_name_plural = 'Руководство'
+
+
+class ManagerProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='manager', verbose_name='Сотрудник')
+    department = models.ForeignKey(Department, on_delete=models.PROTECT, related_name='managers', null=True,
+                                   verbose_name='Отдел')
+
+    class Meta:
+        verbose_name = 'Менеджер'
+        verbose_name_plural = 'Менеджеры'
+
+
+class WorkerProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='worker', verbose_name='Сотрудник')
+    department = models.ForeignKey(Department, on_delete=models.PROTECT, related_name='workers', null=True, verbose_name='Отдел')
+
+    class Meta:
+        verbose_name = 'Работник'
+        verbose_name_plural = 'Работники'
+
+
+

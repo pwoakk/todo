@@ -3,13 +3,14 @@ from abc import ABC
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
+from django.contrib.auth.views import PasswordChangeView
 from django.http import HttpResponse, Http404, HttpResponseForbidden
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import generic
 
 from .forms import LoginForm, UserRegisterForm, UserUpdateForm
-from .models import User
+from .models import User, ManagerProfile, DirectorProfile
 
 
 class LoginView(generic.FormView):
@@ -40,10 +41,32 @@ class RegisterDoneView(generic.TemplateView):
     template_name = 'register_done.html'
 
 
+class ManagerProfileView(generic.DetailView):
+    model = ManagerProfile
+    template_name = 'profile.html'
+
+
+class DirectorProfileView(LoginRequiredMixin, generic.TemplateView):
+    template_name = 'profile.html'
+
+
+class DirectorProfileView2(generic.TemplateView):
+    template_name = 'profile.html'
+    
+    def get(self, request, *args, **kwargs):
+        context = super(DirectorProfileView2, self).get(kwargs)
+        context['director'] = DirectorProfile.objects.get(id=self.kwargs['pk'])
+        context['manager'] = ManagerProfile.objects.all()
+        print(f"{context=}")
+        return context
+
+
+
+
 def user_logout(request):
     if request.user.is_authenticated:
         logout(request)
-    return redirect('index')
+    return redirect('login')
 
 
 class UserUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
@@ -56,3 +79,8 @@ class UserUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView
         if self.kwargs.get('pk') == self.request.user.pk:
             return True
         return False
+
+
+class UserPasswordChangeView(PasswordChangeView):
+    template_name = 'change_password.html'
+    success_url = reverse_lazy('logout')
