@@ -1,8 +1,9 @@
 from django.db import models
 
 
-class Government(models.Model):
-    name = models.CharField('Управление', max_length=100, unique=True)
+class Management(models.Model):
+    name = models.CharField(max_length=100, verbose_name='Управление')
+    manager = models.ForeignKey('accounts.User', on_delete=models.PROTECT, verbose_name='Менеджеры')
 
     class Meta:
         verbose_name = 'Управление'
@@ -14,7 +15,11 @@ class Government(models.Model):
 
 class Department(models.Model):
     name = models.CharField('Отдел', max_length=50, unique=True)
-    government = models.ForeignKey(Government,on_delete=models.CASCADE, related_name='department', verbose_name='Управление')
+    manager = models.ForeignKey('accounts.User',
+                                on_delete=models.PROTECT,
+                                verbose_name='Менеджеры',
+                                related_name='managers')
+    management = models.ForeignKey(Management, on_delete=models.CASCADE, related_name='worker', verbose_name='Управление')
 
     class Meta:
         verbose_name = 'Отдел'

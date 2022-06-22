@@ -1,13 +1,15 @@
 from django.contrib import admin
 from .models import *
 
-from backend.apps.accounts.models import WorkerProfile, ManagerProfile, DirectorProfile
+from backend.apps.accounts.models import WorkerProfile, ManagerProfile
+
 
 class WorkerProfileInline(admin.StackedInline):
     model = WorkerProfile
     can_delete = False
     verbose_name_plural = "Работники"
     fk_name = "user"
+
 
 class ManagerProfileInline(admin.StackedInline):
     model = ManagerProfile
@@ -16,15 +18,9 @@ class ManagerProfileInline(admin.StackedInline):
     fk_name = "user"
 
 
-class DirectorProfileInline(admin.StackedInline):
-    model = DirectorProfile
-    can_delete = False
-    verbose_name_plural = "Директоры"
-    fk_name = "user"
-
-
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
+    inlines = [WorkerProfileInline, ManagerProfileInline]
     list_display = [
         'id',
         'username',
@@ -33,7 +29,7 @@ class UserAdmin(admin.ModelAdmin):
         'last_name',
         'phone',
         'is_active',
-        'role'
+        'role',
     ]
     list_editable = ['is_active']
 

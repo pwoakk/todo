@@ -14,12 +14,10 @@ class Task(models.Model):
     deadline = models.DateTimeField()
 
     STATUS_NOT_STARTED = 'not_started'
-    STATUS_STARTED = "started"
     STATUS_IN_PROCESS = "in_process"
     STATUS_FINISHED = "finished"
     TASK_STATUSES = {
         (STATUS_NOT_STARTED, "Не_начата"),
-        (STATUS_STARTED, "Начата"),
         (STATUS_IN_PROCESS, "Выполняется"),
         (STATUS_FINISHED, "Завершена")
     }
@@ -27,8 +25,8 @@ class Task(models.Model):
     status = models.CharField("Статус", max_length=11,
                               choices=TASK_STATUSES, default=STATUS_NOT_STARTED)
 
-    author = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True)
-    department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True, blank=True)
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True, related_name='tasks', verbose_name='Задачи')
+    department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Отдел')
 
     class Meta:
         verbose_name = 'Задача'

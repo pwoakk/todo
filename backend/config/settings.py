@@ -81,7 +81,7 @@ WSGI_APPLICATION = 'backend.config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'tododb',
+        'NAME': 'tododb2',
         'USER': 'auser',
         'PASSWORD': 'pass2500451715',
         'HOST': '127.0.0.1',

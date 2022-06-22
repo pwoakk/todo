@@ -10,7 +10,8 @@ from django.urls import reverse_lazy
 from django.views import generic
 
 from .forms import LoginForm, UserRegisterForm, UserUpdateForm
-from .models import User, ManagerProfile, DirectorProfile
+from .models import User, ManagerProfile
+from ..task.models import Task
 
 
 class LoginView(generic.FormView):
@@ -52,15 +53,20 @@ class DirectorProfileView(LoginRequiredMixin, generic.TemplateView):
 
 class DirectorProfileView2(generic.TemplateView):
     template_name = 'profile.html'
-    
-    def get(self, request, *args, **kwargs):
-        context = super(DirectorProfileView2, self).get(kwargs)
-        context['director'] = DirectorProfile.objects.get(id=self.kwargs['pk'])
-        context['manager'] = ManagerProfile.objects.all()
-        print(f"{context=}")
-        return context
 
 
+class UserProfilePage(LoginRequiredMixin, generic.ListView):
+    model = ManagerProfile
+    template_name = 'profile.html'
+    context_object_name = 'about'
+
+    def get_queryset(self):
+        queryset = Task.objects.filter(author=self.request.user)
+        return queryset
+
+    @staticmethod
+    def post_authors():
+        return User.objects.filter(role=False)
 
 
 def user_logout(request):

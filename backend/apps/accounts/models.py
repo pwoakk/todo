@@ -4,15 +4,13 @@ from django.utils.translation import ugettext_lazy as _
 from django.db import models
 
 from backend.apps.accounts.managers import UserManager
-from backend.apps.job.models import Department, Government
+from backend.apps.job.models import Department, Management
 
 
 class User(AbstractUser):
-    ROLE_DIRECTOR = 'Директор'
     ROLE_MANAGER = 'Менеджер'
     ROLE_STAFF = 'Специалист'
     ROLES = (
-        (ROLE_DIRECTOR, 'Директор'),
         (ROLE_MANAGER, 'Менеджер'),
         (ROLE_STAFF, 'Специалист'),
     )
@@ -36,32 +34,45 @@ class User(AbstractUser):
     objects = UserManager()
 
 
-class DirectorProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='director', verbose_name='Сотрудник')
-    government = models.ForeignKey(Government, on_delete=models.PROTECT, related_name='directors', verbose_name='Отдел')
-
-    class Meta:
-        verbose_name = 'Руководство'
-        verbose_name_plural = 'Руководство'
-
-
 class ManagerProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='manager', verbose_name='Сотрудник')
-    department = models.ForeignKey(Department, on_delete=models.PROTECT, related_name='managers', null=True,
-                                   verbose_name='Отдел')
+    POSITION_DIRECTOR = 'Директор'
+    POSITION_MANAGER = 'Менеджер'
+    POSITION_OTHER = 'Другое'
+    POSITION_STATUS = (
+        (POSITION_DIRECTOR, 'Директор'),
+        (POSITION_MANAGER, 'Менеджер'),
+        (POSITION_OTHER, 'Другое'),
+    )
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name='manager',
+        verbose_name='Сотрудник',)
+    department = models.ForeignKey(Management, on_delete=models.PROTECT, related_name='managers', null=True,
+                                   verbose_name='Управление')
+    position = models.CharField('Должность', max_length=40, choices=POSITION_STATUS, default=POSITION_OTHER)
 
     class Meta:
         verbose_name = 'Менеджер'
         verbose_name_plural = 'Менеджеры'
 
+    def __str__(self):
+        return f'{self.user.last_name} {self.user.first_name} {self.user.middle_name}'
+
 
 class WorkerProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='worker', verbose_name='Сотрудник')
+    user = models.OneToOneField(User,
+                                on_delete=models.CASCADE,
+                                related_name='worker',
+                                verbose_name='Сотрудник',)
     department = models.ForeignKey(Department, on_delete=models.PROTECT, related_name='workers', null=True, verbose_name='Отдел')
 
     class Meta:
-        verbose_name = 'Работник'
-        verbose_name_plural = 'Работники'
+        verbose_name = 'Сотрудник'
+        verbose_name_plural = 'Сотрудники'
+
+    def __str__(self):
+        return f'{self.user.last_name} {self.user.first_name} {self.user.middle_name}'
 
 
 
