@@ -37,7 +37,7 @@
                       <label for="todoCheck1"></label>
                     </div>
                     <!-- todo text -->
-                    <span class="text">{{task}}</span>
+                    <span class="text"><a href="{% url 'task_detail' task.id %}"  >{{task}}</a></span>
                     <!-- Emphasis label -->
                     <small class="badge badge-danger"><i class="far fa-clock"></i> {{task.deadline}}</small>
                     <!-- General tools such as edit or delete-->
@@ -51,7 +51,7 @@
               </div>
               <!-- /.card-body -->
               <div class="card-footer clearfix">
-                <button type="button" class="btn btn-primary float-right"><i class="fas fa-plus"></i> Add item</button>
+                <button type="button" class="btn btn-primary float-right" onclick="document.location='{% url 'task_create' %}'"> <i class="fas fa-plus"></i> Создать</button>
               </div>
             </div>
 
@@ -89,26 +89,6 @@
             {% endfor %}
           </div>
 
-        </div>
-
-        <div class="card card-row card-primary">
-          <div class="card-header">
-            <h3 class="card-title">
-              Начато
-            </h3>
-          </div>
-          <div class="card-body">
-            <div class="card card-primary card-outline">
-              <div class="card-header">
-                <h5 class="card-title">Create first milestone</h5>
-                <div class="card-tools">
-                  <a href="#" class="btn btn-tool">
-                    <i class="fas fa-pen"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
 
         <div class="card card-row card-default">

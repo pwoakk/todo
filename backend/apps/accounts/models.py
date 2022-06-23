@@ -19,7 +19,7 @@ class User(AbstractUser):
     role = models.CharField('Роль', choices=ROLES, default=ROLE_STAFF, max_length=50)
     middle_name = models.CharField('Отчество', max_length=150, blank=True)
     email = None
-    avatar = models.ImageField("Фото", upload_to="user_images/", null=True, blank=True)
+    avatar = models.ImageField("Фото", upload_to="user_images/", null=True, blank=True, default='./default.png')
     is_active = models.BooleanField('Работает', default=False)
     phone = models.CharField(
         'Номер телефона',
@@ -32,6 +32,13 @@ class User(AbstractUser):
     REQUIRED_FIELDS = []
 
     objects = UserManager()
+
+    @property
+    def get_photo_url(self):
+        if self.avatar and hasattr(self.avatar, 'url'):
+            return self.avatar.url
+        else:
+            return "default.png"
 
 
 class ManagerProfile(models.Model):

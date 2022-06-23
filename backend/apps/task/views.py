@@ -2,11 +2,12 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.urls import reverse_lazy
+from django.views import generic
 from django.views.generic import TemplateView, ListView, DetailView, CreateView
 from django.views.generic.edit import FormMixin
 
 from backend.apps.task.models import *
-from .forms import CommentForm
+from .forms import CommentForm, TaskCreateForm
 
 
 class IndexPage(ListView):
@@ -35,7 +36,6 @@ class TaskDetailView(DetailView):
 
         return context
 
-
     def post(self, request, *args, **kwargs):
         form = CommentForm(request.POST)
         self.object = self.get_object()
@@ -43,7 +43,6 @@ class TaskDetailView(DetailView):
 
         task = Task.objects.filter(id=self.kwargs['pk'])
         pk = self.kwargs["pk"]
-
 
         context['task'] = task
         context['comments'] = Comment.objects.filter(task=pk)
@@ -62,3 +61,11 @@ class TaskDetailView(DetailView):
             return self.render_to_response(context=context)
 
         return self.render_to_response(context=context)
+
+
+class TaskCreateView(CreateView):
+    model = Task
+    form_class = TaskCreateForm
+    template_name = 'task_create.html'
+    success_url = reverse_lazy('index')
+

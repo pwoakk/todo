@@ -18,10 +18,8 @@ class TaskCreateForm(forms.ModelForm):
         fields = [
             "name",
             "description",
-            "deadline",
         ]
         widgets = {
-            "name": forms.TextInput(attrs={"class": "form-control"}),
-            "text": forms.Textarea(attrs={"class": "form-control"}),
-            "deadline": forms.DateTimeInput(attrs={"class": "form-control"}),
+            "name": forms.TextInput(attrs={'class': 'form-control'}),
+            "description": forms.Textarea(attrs={'class': 'form-control'}),
         }

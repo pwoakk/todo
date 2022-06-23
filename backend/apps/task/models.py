@@ -1,7 +1,12 @@
 from django.db import models
+from django.utils import timezone
 
 from backend.apps.accounts.models import User
 from backend.apps.job.models import Department
+
+
+def one_week_hence():
+    return timezone.now() + timezone.timedelta(days=7)
 
 
 class Task(models.Model):
@@ -11,7 +16,7 @@ class Task(models.Model):
     description = models.TextField('Описание')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    deadline = models.DateTimeField()
+    deadline = models.DateTimeField(default=one_week_hence)
 
     STATUS_NOT_STARTED = 'not_started'
     STATUS_IN_PROCESS = "in_process"
