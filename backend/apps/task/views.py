@@ -30,7 +30,7 @@ class TaskDetailView(DetailView):
         print(kwargs['object'].id)
         context = super().get_context_data(**kwargs)
         pk = self.kwargs["pk"]
-
+        form = CommentForm()
         context['comments'] = Comment.objects.filter(task=pk)
         # context['comments'] = Comment.objects.filter(task=kwargs['object'].id)
 
