@@ -1,26 +1,26 @@
 {% extends "base.html" %}
 
-
 {% block content %}
-
-
 <form method="post">
     <section class="content">
       <div class="row">
         <div class="col-md-12">
           <div class="card card-primary">
               <p></p>
-              <h3 class="text-center">Создание задачи</h3>
+              <h3 class="text-center">Изменение задачи</h3>
 
               {% csrf_token %}
             <div class="card-body">
               <div class="form-group">
-                <label>Наименование</label>
-                  {{ form.name }}
+                  <h2>{{ task.name }}</h2>
               </div>
               <div class="form-group">
                 <label>Описание</label>
                 {{ form.description }}
+              </div>
+                <div class="form-group">
+                <label>Срок</label>
+                {{ form.deadline }}
               </div>
 
             </div>
@@ -29,7 +29,7 @@
       </div>
       <div class="row">
         <div class="col-12">
-            <button type="submit" class="btn btn-success">Создать</button>
+            <button type="submit" class="btn btn-success">Обновить</button>
             <a href="{% url 'index' %}" class="btn btn-secondary">Выйти</a>
         </div>
       </div>

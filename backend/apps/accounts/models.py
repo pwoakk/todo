@@ -82,4 +82,3 @@ class WorkerProfile(models.Model):
         return f'{self.user.last_name} {self.user.first_name} {self.user.middle_name}'
 
 
-

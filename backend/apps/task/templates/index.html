@@ -1,14 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-    <h3>This is index page</h3>
-
-
+    <div class="m-0"><h2>Главная страница</h2></div>
     <div class="card">
               <div class="card-header">
                 <h3 class="card-title">
                   <i class="ion ion-clipboard mr-1"></i>
-                  To Do List
+                  Все задачи
                 </h3>
 
                 <div class="card-tools">
@@ -21,6 +19,98 @@
                   </ul>
                 </div>
               </div>
+              <section class="content">
+
+                <!-- Default box -->
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">Projects</h3>
+
+                    <div class="card-tools">
+                      <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                        <i class="fas fa-minus"></i>
+                      </button>
+                      <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="card-body p-0">
+                    <table class="table table-striped projects">
+                        <thead>
+                            <tr>
+                                <th style="width: 1%">
+                                    №
+                                </th>
+                                <th style="width: 20%">
+                                    Название
+                                </th>
+                                <th style="width: 20%">
+                                    Срок
+                                </th>
+                                <th style="width: 30%">
+                                    Исполнитель
+                                </th>
+                                <th style="width: 8%" class="text-center">
+                                    Статус
+                                </th>
+                                <th style="width: 20%">
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for task in tasks %}
+                            <tr>
+                                <td>
+                                  {{task.id}}
+                                </td>
+                                <td>
+                                    <a href="{% url 'task_detail' task.id %}">
+                                      {{task.name}}
+                                    </a>
+                                    <br/>
+                                    <small>
+                                      {{task.created}}
+                                    </small>
+                                </td>
+                                <td>
+                                    <a>
+                                      {{task.deadline}}
+                                    </a>
+                                </td>
+                                <td>
+                                    <ul class="list-inline">
+                                        <li class="list-inline-item">
+                                          <img src="{{task.author.avatar}}">
+                                            <a href="{% url 'profile' %}">{{task.author.last_name}} {{task.author.first_name}} {{task.author.middle_name}}</a>
+                                        </li>
+                                    </ul>
+                                </td>
+                                <td class="project-state">
+                                    <span class="badge badge-success">{{task.status}}</span>
+                                </td>
+                                <td class="project-actions text-right">
+                                    <a class="btn btn-info btn-sm" href="{% url 'task_update' task.id %}">
+                                        <i class="fas fa-pencil-alt">
+                                        </i>
+                                        Править
+                                    </a>
+                                    <a class="btn btn-danger btn-sm" href="#">
+                                        <i class="fas fa-trash">
+                                        </i>
+                                        Удалить
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                  </div>
+                  <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+
+              </section>
               <!-- /.card-header -->
               <div class="card-body">
                 <ul class="todo-list" data-widget="todo-list">

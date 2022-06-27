@@ -23,3 +23,16 @@ class TaskCreateForm(forms.ModelForm):
             "name": forms.TextInput(attrs={'class': 'form-control'}),
             "description": forms.Textarea(attrs={'class': 'form-control'}),
         }
+
+
+class TaskUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Task
+        fields = [
+            'description',
+            'deadline',
+        ]
+        widgets = {
+            'description': forms.Textarea(attrs={'class': 'form-control'}),
+            'deadline': forms.DateInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
+        }

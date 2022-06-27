@@ -18,9 +18,9 @@ class Task(models.Model):
     updated = models.DateTimeField(auto_now=True)
     deadline = models.DateTimeField(default=one_week_hence)
 
-    STATUS_NOT_STARTED = 'not_started'
-    STATUS_IN_PROCESS = "in_process"
-    STATUS_FINISHED = "finished"
+    STATUS_NOT_STARTED = 'Не начат'
+    STATUS_IN_PROCESS = "В процессе"
+    STATUS_FINISHED = "Завершен"
     TASK_STATUSES = {
         (STATUS_NOT_STARTED, "Не_начата"),
         (STATUS_IN_PROCESS, "Выполняется"),

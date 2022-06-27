@@ -7,7 +7,7 @@ from django.views.generic import TemplateView, ListView, DetailView, CreateView
 from django.views.generic.edit import FormMixin
 
 from backend.apps.task.models import *
-from .forms import CommentForm, TaskCreateForm
+from .forms import CommentForm, TaskCreateForm, TaskUpdateForm
 
 
 class IndexPage(ListView):
@@ -67,5 +67,12 @@ class TaskCreateView(CreateView):
     model = Task
     form_class = TaskCreateForm
     template_name = 'task_create.html'
+    success_url = reverse_lazy('index')
+
+
+class TaskUpdateView(generic.UpdateView):
+    model = Task
+    form_class = TaskUpdateForm
+    template_name = 'task_update.html'
     success_url = reverse_lazy('index')
 
