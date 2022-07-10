@@ -1,3 +1,6 @@
+from django import shortcuts
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 
@@ -43,7 +46,6 @@ class TaskDetailView(DetailView):
         task = Task.objects.get(id=pk)
         comments = Comment.objects.filter(task=task)
 
-
         if request.method == "POST":
             form = CommentForm(request.POST)
             if form.is_valid():
@@ -63,7 +65,6 @@ class TaskDetailView(DetailView):
         return render(request, 'task_detail.html', context)
 
 
-
 class TaskCreateView(CreateView):
     model = Task
     form_class = TaskCreateForm
@@ -78,12 +79,19 @@ class TaskUpdateView(generic.UpdateView):
     success_url = reverse_lazy('index')
 
 
+def task_delete(request, pk):
+    if request.user.is_authenticated:
+        task = Task.objects.get(id=pk)
+        task.delete()
+    else:
+        pass
+    return redirect('index')
+
 
 class ProjectListView(ListView):
     template_name = "project_list.html"
     model = Project
     paginate_by = 50
-
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

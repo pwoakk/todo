@@ -1,6 +1,8 @@
 from django import forms
 
 from .models import Comment, Task
+from ..accounts.models import User, ManagerProfile, WorkerProfile
+from ..job.models import Department
 
 
 class CommentForm(forms.ModelForm):
@@ -10,6 +12,13 @@ class CommentForm(forms.ModelForm):
 
 
 class TaskCreateForm(forms.ModelForm):
+    author = forms.ModelChoiceField(queryset=ManagerProfile.objects.all(),
+                                    widget=forms.Select(attrs={'class': 'form-control'}),)
+    department = forms.ModelChoiceField(queryset=Department.objects.all(),
+                                        widget=forms.Select(attrs={'class': 'form-control'}),)
+    performer = forms.ModelChoiceField(queryset=WorkerProfile.objects.all(),
+                                       widget=forms.Select(attrs={'class': 'form-control'}),)
+
     class Meta:
         model = Task
         fields = [

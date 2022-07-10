@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="main">
+    <form method="POST">
+        {% csrf_token %}
+        Вы хотите действительно хотите удалить запись?
+        <input type="submit" value="Да" />
+        <a href="{% url 'index' %}">Выйти</a>
+    </form>
+</div>
+{% endblock %}

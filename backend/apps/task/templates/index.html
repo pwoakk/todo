@@ -82,7 +82,7 @@
                                     <ul class="list-inline">
                                         <li class="list-inline-item">
                                           <img src="{{task.author.avatar}}">
-                                            <a href="{% url 'profile' %}">{{task.author.last_name}} {{task.author.first_name}} {{task.author.middle_name}}</a>
+                                            <a href="{% url 'profile' %}">{{task.performer.user.last_name}} {{task.performer.user.first_name}} {{task.performer.user.middle_name}}</a>
                                         </li>
                                     </ul>
                                 </td>
@@ -95,7 +95,7 @@
                                         </i>
                                         Править
                                     </a>
-                                    <a class="btn btn-danger btn-sm" href="#">
+                                    <a class="btn btn-danger btn-sm" href="{% url 'task_delete' task.id  %}}">
                                         <i class="fas fa-trash">
                                         </i>
                                         Удалить

@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 
-from backend.apps.accounts.models import User
+from backend.apps.accounts.models import User, WorkerProfile, ManagerProfile
 from backend.apps.job.models import Department
 
 
@@ -30,8 +30,9 @@ class Task(models.Model):
     status = models.CharField("Статус", max_length=11,
                               choices=TASK_STATUSES, default=STATUS_NOT_STARTED)
 
-    author = models.ForeignKey(User, on_delete=models.SET_NULL, default=None, null=True, blank=True, related_name='tasks', verbose_name='Задачи')
+    author = models.ForeignKey(ManagerProfile, on_delete=models.SET_NULL, default=ManagerProfile, null=True, related_name='tasks', verbose_name='Задачи')
     department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Отдел')
+    performer = models.ForeignKey(WorkerProfile, on_delete=models.SET_NULL, default=WorkerProfile, null=True, related_name="performer_task")
 
     class Meta:
         verbose_name = 'Задача'
