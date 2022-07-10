@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.core.paginator import Paginator
+from django.shortcuts import render, redirect
 
 # Create your views here.
 from django.urls import reverse_lazy
@@ -37,30 +38,30 @@ class TaskDetailView(DetailView):
         return context
 
     def post(self, request, *args, **kwargs):
-        form = CommentForm(request.POST)
-        self.object = self.get_object()
-        context = super().get_context_data(**kwargs)
-
-        task = Task.objects.filter(id=self.kwargs['pk'])
         pk = self.kwargs["pk"]
 
-        context['task'] = task
-        context['comments'] = Comment.objects.filter(task=pk)
-        context['form'] = form
+        task = Task.objects.get(id=pk)
+        comments = Comment.objects.filter(task=task)
 
-        if form.is_valid():
-            name = request.user
-            text = form.cleaned_data['text']
 
-            comment = Comment.objects.create(
-                name=name, text=text, task=task
-            )
-
+        if request.method == "POST":
+            form = CommentForm(request.POST)
+            if form.is_valid():
+                instance = form.save(commit=False)
+                instance.author = request.user
+                instance.task = task
+                instance.save()
+            return redirect('task_detail', pk=task.id)
+        else:
             form = CommentForm()
-            context['form'] = form
-            return self.render_to_response(context=context)
+        context = {
+            'task': task,
+            "form": form,
+            'comments': comments
+        }
 
-        return self.render_to_response(context=context)
+        return render(request, 'task_detail.html', context)
+
 
 
 class TaskCreateView(CreateView):
@@ -75,4 +76,18 @@ class TaskUpdateView(generic.UpdateView):
     form_class = TaskUpdateForm
     template_name = 'task_update.html'
     success_url = reverse_lazy('index')
+
+
+
+class ProjectListView(ListView):
+    template_name = "project_list.html"
+    model = Project
+    paginate_by = 50
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['projects'] = Project.objects.all()
+        context['range'] = range(1,5)
+        return context
 

@@ -42,15 +42,15 @@ class Task(models.Model):
         return self.name
 
 
-class Tag(models.Model):
-    """Моделька тега для задач, будет использоваться для фильтрации задач"""
+class Project(models.Model):
+    """Моделька проекта для задач, проекты включают выполнение определенных задач"""
     name = models.CharField('Наименование', max_length=30, unique=True)
     slug = models.SlugField('Слаг', max_length=30, unique=True)
     task = models.ManyToManyField(Task)
 
     class Meta:
-        verbose_name = 'Тег'
-        verbose_name_plural = 'Теги'
+        verbose_name = 'Проект'
+        verbose_name_plural = 'Проекты'
         ordering = ['name']
 
     def __str__(self):

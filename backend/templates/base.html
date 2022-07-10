@@ -30,7 +30,7 @@
         <a href="#" class="nav-link">Список задач</a>
       </li>
       {% if not  request.user.is_authenticated %}
-        <li class="nav-item d-none d-sm-inline-block"> <a class="nav-link" href="{% url 'sign_in' %}"> Войти </a></li>
+        <li class="nav-item d-none d-sm-inline-block"> <a class="nav-link" href="{% url 'login' %}"> Войти </a></li>
         <li> <a href="{% url 'register'%}"> Регистрация</a></li>
         {% else %}
         <li class="nav-item d-none d-sm-inline-block"> <a class="nav-link" href="{% url 'logout' %}">Выйти</a></li>

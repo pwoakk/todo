@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+
+
+{% block content %}
+
+    <section class="content">
+      <div class="container-fluid">
+
+
+        <h4 class="mb-2 mt-4">Ваши проекты</h4>
+        <div class="row">
+
+            {% for project in page_obj %}
+          <div class="col-md-3">
+            <div class="card card-success">
+              <div class="card-header">
+                <h3 class="card-title">{{project.name}}</h3>
+
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                  </button>
+                </div>
+                <!-- /.card-tools -->
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                  {% for task in project.task.all %}
+                  <p></p><i class="far fa-calendar-alt"><a href="{% url 'task_detail' task.id %}" target="_blank" style="color:grey;">
+                  {{task.name}}
+              </a>
+              </i>
+                  </p>
+
+                  {% endfor %}
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+
+            {% endfor %}
+
+        </div>
+
+
+      </div><!-- /.container-fluid -->
+        <div class="row">
+            <div class="col-sm-12 col-md-5">
+                <div class="dataTables_info" id="example2_info" role="status" aria-live="polite">
+                   {{paginator.count}} Всего {{projects.all.count}} {% if projects.all.count in range %} проекта {% else %} проектов {% endif %}
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-7">
+                <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
+
+                    <ul class="pagination">
+
+{% if page_obj.has_previous %}
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+    {% else %}
+        <li class="disabled page-item"><span class="page-link">&laquo;</span></li>
+    {% endif %}
+    {% for i in page_range|default_if_none:page_obj.paginator.get_elided_page_range %}
+        {% if page_obj.number == i %}
+            <li class="active page-item"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span>
+            </li>
+        {% else %}
+            {% if i == page_obj.paginator.ELLIPSIS %}
+                <li class="page-item"><span class="page-link">{{ i }}</span></li>
+            {% else %}
+                <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+    {% if page_obj.has_next %}
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+    {% else %}
+        <li class="disabled page-item"><span class="page-link">&raquo;</span></li>
+    {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+{% endblock %}

@@ -9,7 +9,6 @@ class CommentForm(forms.ModelForm):
         fields = ['text']
 
 
-
 class TaskCreateForm(forms.ModelForm):
     class Meta:
         model = Task
@@ -34,3 +33,5 @@ class TaskUpdateForm(forms.ModelForm):
             'description': forms.Textarea(attrs={'class': 'form-control'}),
             'deadline': forms.DateInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
         }
+
+

@@ -10,7 +10,7 @@ class TaskAdmin(admin.ModelAdmin):
     search_fields = ('id', 'name', 'description', 'status', 'created', 'deadline', )
 
 
-@admin.register(Tag)
+@admin.register(Project)
 class TagAdmin(admin.ModelAdmin):
     list_display = ['name']
 
