@@ -3,7 +3,6 @@ from django.db import models
 
 class Management(models.Model):
     name = models.CharField(max_length=100, verbose_name='Управление')
-    manager = models.ForeignKey('accounts.User', on_delete=models.PROTECT, verbose_name='Менеджеры')
 
     class Meta:
         verbose_name = 'Управление'
@@ -19,7 +18,7 @@ class Department(models.Model):
                                 on_delete=models.PROTECT,
                                 verbose_name='Менеджеры',
                                 related_name='managers')
-    management = models.ForeignKey(Management, on_delete=models.CASCADE, related_name='worker', verbose_name='Управление')
+    management = models.ForeignKey(Management, on_delete=models.CASCADE, related_name='workers', verbose_name='Управление')
 
     class Meta:
         verbose_name = 'Отдел'

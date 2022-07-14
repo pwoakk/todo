@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'backend.apps.task',
     'backend.apps.accounts',
     'backend.apps.job',
+    'backend.apps.notepad',
 ]
 
 MIDDLEWARE = [

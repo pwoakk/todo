@@ -12,22 +12,23 @@ class CommentForm(forms.ModelForm):
 
 
 class TaskCreateForm(forms.ModelForm):
-    author = forms.ModelChoiceField(queryset=ManagerProfile.objects.all(),
-                                    widget=forms.Select(attrs={'class': 'form-control'}),)
-    department = forms.ModelChoiceField(queryset=Department.objects.all(),
-                                        widget=forms.Select(attrs={'class': 'form-control'}),)
-    performer = forms.ModelChoiceField(queryset=WorkerProfile.objects.all(),
-                                       widget=forms.Select(attrs={'class': 'form-control'}),)
+    performer = forms.ModelMultipleChoiceField(queryset=User.objects.all(),
+                                               widget=forms.CheckboxSelectMultiple(attrs={'placeholder': 'Исполнитель'}))
 
     class Meta:
         model = Task
         fields = [
             "name",
             "description",
+            'author',
+            'department',
+            'performer',
         ]
         widgets = {
             "name": forms.TextInput(attrs={'class': 'form-control'}),
             "description": forms.Textarea(attrs={'class': 'form-control'}),
+            'author': forms.Select(attrs={'class': 'form-control', 'placeholder': 'Автор'}),
+            'department': forms.Select(attrs={'class': 'form-control', 'placeholder': 'Отдел'}),
         }
 
 
@@ -37,10 +38,14 @@ class TaskUpdateForm(forms.ModelForm):
         fields = [
             'description',
             'deadline',
+            'performer',
+            'status',
         ]
         widgets = {
             'description': forms.Textarea(attrs={'class': 'form-control'}),
             'deadline': forms.DateInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
+            'performer': forms.CheckboxSelectMultiple(),
+            'status': forms.Select(attrs={'class': 'form-control'}),
         }
 
 

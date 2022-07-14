@@ -30,9 +30,9 @@ class Task(models.Model):
     status = models.CharField("Статус", max_length=11,
                               choices=TASK_STATUSES, default=STATUS_NOT_STARTED)
 
-    author = models.ForeignKey(ManagerProfile, on_delete=models.SET_NULL, default=ManagerProfile, null=True, related_name='tasks', verbose_name='Задачи')
-    department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Отдел')
-    performer = models.ForeignKey(WorkerProfile, on_delete=models.SET_NULL, default=WorkerProfile, null=True, related_name="performer_task")
+    author = models.ForeignKey(User, on_delete=models.PROTECT, null=True, related_name='tasks', verbose_name='Автор')
+    department = models.ForeignKey(Department, on_delete=models.PROTECT, null=True, blank=True, verbose_name='Отдел')
+    performer = models.ManyToManyField(User, null=True, verbose_name='Исполнитель')
 
     class Meta:
         verbose_name = 'Задача'

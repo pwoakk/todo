@@ -19,9 +19,11 @@ class IndexPage(ListView):
     model = Task
 
     def get_context_data(self, **kwargs):
+        update_form = TaskUpdateForm
         context = super().get_context_data(**kwargs)
         context['tasks'] = Task.objects.all()
         context['not_started_tasks'] = Task.objects.filter(status=Task.STATUS_NOT_STARTED)
+        context['task_update_form'] = update_form
         return context
 
 
@@ -73,6 +75,13 @@ class TaskCreateView(CreateView):
 
 
 class TaskUpdateView(generic.UpdateView):
+    model = Task
+    form_class = TaskUpdateForm
+    template_name = 'task_update.html'
+    success_url = reverse_lazy('index')
+
+
+class TaskUpdateModalView(generic.UpdateView):
     model = Task
     form_class = TaskUpdateForm
     template_name = 'task_update.html'
